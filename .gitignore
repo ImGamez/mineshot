@@ -44,3 +44,7 @@ hs_err_pid*
 /bin/
 /private/
 /minecraft/
+
+## IntellijIDEA##
+.idea
+*.iml

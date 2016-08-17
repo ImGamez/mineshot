@@ -13,11 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.event.ClickEvent;
-import static net.minecraft.event.ClickEvent.Action.*;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.ClickEvent.Action.*;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * Simple and easy chat log utility class.
@@ -31,14 +31,14 @@ public class ChatUtils {
     private ChatUtils() {
     }
     
-    public static void print(String msg, EnumChatFormatting format, Object... args) {
+    public static void print(String msg, TextFormatting format, Object... args) {
         if (MC.ingameGUI == null) {
             return;
         }
         
         GuiNewChat chat = MC.ingameGUI.getChatGUI();
-        ChatComponentTranslation ret = new ChatComponentTranslation(msg, args);
-        ret.getChatStyle().setColor(format);
+        TextComponentTranslation ret = new TextComponentTranslation(msg, args);
+        ret.getStyle().setColor(format);
         
         chat.printChatMessage(ret);
     }
@@ -48,7 +48,7 @@ public class ChatUtils {
     }
     
     public static void printFileLink(String msg, File file) {
-        ChatComponentText text = new ChatComponentText(file.getName());
+        TextComponentString text = new TextComponentString(file.getName());
         String path;
         
         try {
@@ -57,8 +57,8 @@ public class ChatUtils {
             path = file.getAbsolutePath();
         }
         
-        text.getChatStyle().setChatClickEvent(new ClickEvent(OPEN_FILE, path));
-        text.getChatStyle().setUnderlined(true);
+        text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path));
+        text.getStyle().setUnderlined(true);
         
         print(msg, text);
     }

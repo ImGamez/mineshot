@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -217,12 +217,12 @@ public class OrthoViewHandler {
         // update zoom and rotation
         if (!modifierKeyPressed()) {
             int ticksElapsed = tick - tickPrevious;
-            double elapsed = ticksElapsed + (evt.renderPartialTicks - partialPrevious);
+            double elapsed = ticksElapsed + (evt.getRenderPartialTicks() - partialPrevious);
             elapsed *= SECONDS_PER_TICK * ROTATE_SPEED;
             updateZoomAndRotation(elapsed);
             
             tickPrevious = tick;
-            partialPrevious = evt.renderPartialTicks;
+            partialPrevious = evt.getRenderPartialTicks();
         }
 
         float width = zoom * (MC.displayWidth / (float) MC.displayHeight);
