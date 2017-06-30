@@ -11,24 +11,23 @@ package info.ata4.minecraft.mineshot.client.capture;
 
 import info.ata4.minecraft.mineshot.client.wrapper.Projection;
 import info.ata4.minecraft.mineshot.client.wrapper.ToggleableClippingHelper;
-import info.ata4.minecraft.mineshot.util.reflection.MinecraftAccessor;
-import java.io.File;
+import info.ata4.minecraft.mineshot.util.reflection.PrivateAccessor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import static java.nio.file.StandardOpenOption.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.Timer;
-import org.apache.commons.io.IOUtils;
 import org.lwjgl.util.Dimension;
 
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class FramebufferTiledWriter extends FramebufferWriter {
+public class FramebufferTiledWriter extends FramebufferWriter implements PrivateAccessor {
     
     private static final Minecraft MC = Minecraft.getMinecraft();
 
@@ -38,7 +37,7 @@ public class FramebufferTiledWriter extends FramebufferWriter {
     private final ToggleableClippingHelper clippingHelper = ToggleableClippingHelper.getInstance();
     private boolean clippingEnabled;
     
-    public FramebufferTiledWriter(File file, FramebufferCapturer fbc, int width, int height) throws FileNotFoundException, IOException {
+    public FramebufferTiledWriter(Path file, FramebufferCapturer fbc, int width, int height) throws FileNotFoundException, IOException {
         super(file, fbc);
         
         this.widthTiled = width;
@@ -70,24 +69,15 @@ public class FramebufferTiledWriter extends FramebufferWriter {
         Projection.zoom = tilesX <= tilesY ? tilesY : tilesX;
         
         EntityRenderer entityRenderer = MC.entityRenderer;
-        Timer timer = MinecraftAccessor.getTimer(MC);
+        Timer timer = getTimer(MC);
         
         fbc.setFlipColors(true);
         fbc.setFlipLines(false);
         
         modifySettings();
         
-        long fileSize = (long) widthTiled * heightTiled * bpp + HEADER_SIZE;
-        ByteBuffer bbHeader = buildTargaHeader(widthTiled, heightTiled, bpp * 8);
-        
-        RandomAccessFile raf = null;
-
-        try {
-            raf = new RandomAccessFile(file, "rw");
-            raf.setLength(fileSize);
-            
-            FileChannel fc = raf.getChannel();
-            fc.write(bbHeader);
+        try (FileChannel fc = FileChannel.open(file, READ, WRITE, CREATE)) {
+            fc.write(buildTargaHeader(widthTiled, heightTiled, bpp * 8));
             
             long nanoTime = System.nanoTime();
             float partialTicks = timer == null ? 0 : timer.renderPartialTicks;
@@ -133,9 +123,6 @@ public class FramebufferTiledWriter extends FramebufferWriter {
             
             // restore game settings
             restoreSettings();
-            
-            // close file
-            IOUtils.closeQuietly(raf);
         }
     }
 }

@@ -12,7 +12,7 @@ package info.ata4.minecraft.mineshot.client;
 import info.ata4.minecraft.mineshot.client.util.ChatUtils;
 import info.ata4.minecraft.mineshot.client.wrapper.Projection;
 import info.ata4.minecraft.mineshot.client.wrapper.ToggleableClippingHelper;
-import info.ata4.minecraft.mineshot.util.reflection.ActiveRenderInfoAccessor;
+import info.ata4.minecraft.mineshot.util.reflection.PrivateAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,7 +33,7 @@ import static org.lwjgl.opengl.GL11.GL_PROJECTION;
  * 
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class OrthoViewHandler {
+public class OrthoViewHandler implements PrivateAccessor {
     
     private static final Minecraft MC = Minecraft.getMinecraft();
     private static final String KEY_CATEGORY = "key.categories.mineshot";
@@ -217,12 +217,13 @@ public class OrthoViewHandler {
         // update zoom and rotation
         if (!modifierKeyPressed()) {
             int ticksElapsed = tick - tickPrevious;
-            double elapsed = ticksElapsed + (evt.getRenderPartialTicks() - partialPrevious);
+            double partial = evt.getRenderPartialTicks();
+            double elapsed = ticksElapsed + (partial - partialPrevious);
             elapsed *= SECONDS_PER_TICK * ROTATE_SPEED;
             updateZoomAndRotation(elapsed);
             
             tickPrevious = tick;
-            partialPrevious = evt.getRenderPartialTicks();
+            partialPrevious = partial;
         }
 
         float width = zoom * (MC.displayWidth / (float) MC.displayHeight);
@@ -250,11 +251,11 @@ public class OrthoViewHandler {
         if (!freeCam) {
             float pitch = xRot;
             float yaw = yRot + 180;
-            ActiveRenderInfoAccessor.setRotationX(MathHelper.cos(yaw * (float) Math.PI / 180f));
-            ActiveRenderInfoAccessor.setRotationZ(MathHelper.sin(yaw * (float) Math.PI / 180f));
-            ActiveRenderInfoAccessor.setRotationYZ(-ActiveRenderInfo.getRotationZ() * MathHelper.sin(pitch * (float) Math.PI / 180f));
-            ActiveRenderInfoAccessor.setRotationXY(ActiveRenderInfo.getRotationX() * MathHelper.sin(pitch * (float) Math.PI / 180f));
-            ActiveRenderInfoAccessor.setRotationXZ(MathHelper.cos(pitch * (float) Math.PI / 180f));
+            setRotationX(MathHelper.cos(yaw * (float) Math.PI / 180f));
+            setRotationZ(MathHelper.sin(yaw * (float) Math.PI / 180f));
+            setRotationYZ(-ActiveRenderInfo.getRotationZ() * MathHelper.sin(pitch * (float) Math.PI / 180f));
+            setRotationXY(ActiveRenderInfo.getRotationX() * MathHelper.sin(pitch * (float) Math.PI / 180f));
+            setRotationXZ(MathHelper.cos(pitch * (float) Math.PI / 180f));
         }
     }
 }
