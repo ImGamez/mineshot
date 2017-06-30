@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 public class Mineshot {
     
     public static final String NAME = "Mineshot";
-    public static final String ID = NAME;
+    public static final String ID = "mineshot";
     public static final String VERSION = "@VERSION@";
     
     @Instance(ID)

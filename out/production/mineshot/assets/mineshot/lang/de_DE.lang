@@ -1,0 +1,30 @@
+# keys
+key.categories.mineshot=Mineshot
+
+key.mineshot.capture=Riesiger Screenshot
+key.mineshot.ortho.toggle=Kameramodus wechseln
+key.mineshot.ortho.zoom_in=Kamera reinzoomen
+key.mineshot.ortho.zoom_out=Kamera rauszoomen
+key.mineshot.ortho.rotate_l=Kamera nach links
+key.mineshot.ortho.rotate_r=Kamera nach rechts
+key.mineshot.ortho.rotate_u=Kamera nach oben
+key.mineshot.ortho.rotate_d=Kamera nach unten
+key.mineshot.ortho.rotate_t=Kamera Draufsicht
+key.mineshot.ortho.rotate_f=Kamera Vorderansicht
+key.mineshot.ortho.rotate_s=Kamera Seitenansicht
+key.mineshot.ortho.clip=Kamera Clippingdistanz ändern
+
+mineshot.orthomp=Orthographische Perspektive im Mehrspieler-Modus nicht verfügbar
+
+# config
+mineshot.config.captureWidth=Breite
+mineshot.config.captureWidth.tooltip=Breite des aufzunehmenden Screenshots
+
+mineshot.config.captureHeight=Höhe
+mineshot.config.captureHeight.tooltip=Höhe des aufzunehmenden Screenshots
+
+mineshot.config.captureTiled=Screenshots Kacheln
+mineshot.config.captureTiled.tooltip=Setze Screenshots aus mehreren kleineren Screenshots zusammen. Dadurch können wesentlich größere Screenshots aufgenommen werden als normal möglich. Allerdings funktionieren dann manche Shader nicht mehr richtig.
+
+mineshot.config.preloadChunks=Chunk-Preloading
+mineshot.config.preloadChunks.tooltip=Alle sichtbaren Chunks werden vollständig geladen bevor der Screenshot erstellt wird.

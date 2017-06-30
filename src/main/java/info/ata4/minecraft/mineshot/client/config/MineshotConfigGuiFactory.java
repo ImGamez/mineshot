@@ -25,8 +25,13 @@ public class MineshotConfigGuiFactory implements IModGuiFactory {
     }
 
     @Override
-    public Class<? extends GuiScreen> mainConfigGuiClass() {
-        return MineshotConfigGui.class;
+    public boolean hasConfigGui() {
+        return true;
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parentScreen) {
+        return new MineshotConfigGui(parentScreen);
     }
 
     @Override
@@ -34,11 +39,4 @@ public class MineshotConfigGuiFactory implements IModGuiFactory {
         // unused/unimplemented by Forge at time this was written
         return null;
     }
-
-    @Override
-    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
-        // unused/unimplemented by Forge at time this was written
-        return null;
-    }
-    
 }
